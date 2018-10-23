@@ -1,6 +1,5 @@
 # ZetabaseOnAndroid
 
-
 #### About Zetabase
 
 Zetabase is a NoSQL database provides a quick way to store or cache data.
@@ -28,3 +27,71 @@ getPath | null | Return the path of the data node.
 getData | null | Return the data of the data node.
 getChildrenPath | null | Return a path iterator for all the children data node.
 getChild | path:String | Return the child data node.
+
+#### Example
+
+##### Initialize Zetabase
+```JAVA
+zetabase = Zetabase.getInstnace(this);
+```
+##### Wipe data by path.
+```JAVA
+zetabase.wipe("/");
+```
+
+##### Set monitors
+```JAVA
+zetabase.monitor("/RoomA/students", new Storage.Monitor() {
+    @Override
+    public void onTrigger(String data) {
+        Student std = (Student) JsonReader.jsonToJava(data);
+        Log.d(TAG, "RoomA, A new student comes: " + std.toString());
+    }
+});
+```
+
+##### Write to Zetabase without a callback
+``` JAVA
+zetabase.write("/RoomA/students/Alice", new Student("100000A", "Alice"));
+```
+
+##### Write to Zetabase with a callback
+``` JAVA
+zetabase.write("/RoomA/students/Alice", new Student("100000A", "Alice"), new Storage.OnChangeListner() {
+    @Override
+    public void onChanged() {
+        Log.d(TAG, "Alice is updated");
+    }
+});
+```
+
+##### Append to Zetabase without a callback
+```JAVA
+zetabase.append("/RoomA/students", new Student("100001A", "Bob"));
+```
+
+##### Append to Zetabase with a callback
+```JAVA
+zetabase.append("/RoomA/students", new Student("100002A", "Calvin"), new Storage.OnChangeListner() {
+    @Override
+    public void onChanged() {
+        Log.d(TAG, "Peter is created");
+    }
+});
+```
+
+##### Read from a path
+```JAVA
+Student alice = (Student) zetabase.read("/RoomA/students/Alice");
+Log.d(TAG, alice.toString());
+```
+
+##### List all items without knowing the actual path.
+```JAVA
+Node roomAStd = zetabase.getDataNode("/RoomA/students");
+Iterator<String> items = roomAStd.getChildrenPath();
+while (items.hasNext()) {
+    Student std = (Student) JsonReader.jsonToJava(roomAStd.getChild(items.next()).getData());
+    Log.d(TAG, "Student: " + std.toString());
+}
+```
