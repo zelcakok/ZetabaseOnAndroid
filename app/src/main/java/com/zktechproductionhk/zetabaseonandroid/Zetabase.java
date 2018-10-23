@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.zktechproductionhk.zetabaseonandroid.InternalStorage.IO;
-import com.zktechproductionhk.zetabaseonandroid.Memory.Node;
+import com.zktechproductionhk.zetabaseonandroid.Memory.DataNode;
 import com.zktechproductionhk.zetabaseonandroid.Memory.Storage;
 
 public class Zetabase {
@@ -77,7 +77,7 @@ public class Zetabase {
         this.ram.monitor(path, monitor);
     }
 
-    public Node getDataNode(String path) {
+    public DataNode getDataNode(String path) {
         path = preparePath(path);
         return this.ram.read(path);
     }
@@ -91,13 +91,13 @@ public class Zetabase {
         String rootJson = this.database.read();
         if (rootJson.length() == 0) ram = new Storage();
         else {
-            Node root = (Node) JsonReader.jsonToJava(rootJson);
+            DataNode root = (DataNode) JsonReader.jsonToJava(rootJson);
             ram = new Storage(root);
         }
     }
 
     public void saveState(@Nullable IO.OnFileUpdateListener listener) {
-        Node root = getDataNode("/");
+        DataNode root = getDataNode("/");
         String rootJson = JsonWriter.objectToJson(root);
         this.database.write(rootJson.getBytes(), listener);
     }

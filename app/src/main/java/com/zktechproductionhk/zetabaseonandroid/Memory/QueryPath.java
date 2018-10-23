@@ -1,9 +1,9 @@
 package com.zktechproductionhk.zetabaseonandroid.Memory;
 
 public class QueryPath {
-    public Node parent, self;
+    public DataNode parent, self;
 
-    public QueryPath(Node parent, Node self) {
+    public QueryPath(DataNode parent, DataNode self) {
         this.parent = parent;
         this.self = self;
     }

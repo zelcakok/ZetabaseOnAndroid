@@ -27,15 +27,15 @@ public class Storage {
     }
 
     private static String TAG = "[Storage]";
-    private Node root;
+    private DataNode root;
     private HashMap<String, Monitor> monitors;
 
     public Storage() {
-        this.root = new Node("/");
+        this.root = new DataNode("/");
         this.monitors = new HashMap<>();
     }
 
-    public Storage(Node root) {
+    public Storage(DataNode root) {
         this.root = root;
         this.monitors = new HashMap<>();
     }
@@ -60,7 +60,7 @@ public class Storage {
         Long timestamp = System.currentTimeMillis();
         String hash = md5(path + timestamp.toString());
         QueryPath result = root.traverse(path, true);
-        Node child = new Node(hash);
+        DataNode child = new DataNode(hash);
         child.setData(data);
         result.self.nodes.put(hash, child);
         invalidate(path, data);
@@ -79,15 +79,15 @@ public class Storage {
     }
 
     public void purge(OnChangeListner listner) {
-        this.root = new Node("/");
+        this.root = new DataNode("/");
         listner.onChanged();
     }
 
     public void purge() {
-        this.root = new Node("/");
+        this.root = new DataNode("/");
     }
 
-    public Node read(String path) {
+    public DataNode read(String path) {
         return root.traverse(path, false).self;
     }
 
@@ -96,8 +96,8 @@ public class Storage {
     }
 
     private boolean isSubset(String key, String path) {
-        List<String> keyTokens = Arrays.asList(Node.tokenize(key));
-        List<String> pathTokens = Arrays.asList(Node.tokenize(path));
+        List<String> keyTokens = Arrays.asList(DataNode.tokenize(key));
+        List<String> pathTokens = Arrays.asList(DataNode.tokenize(path));
         return pathTokens.containsAll(keyTokens);
     }
 
