@@ -82,7 +82,7 @@ public class Zetabase {
         return this.ram.read(path);
     }
 
-    public static String preparePath(String path) {
+    private String preparePath(String path) {
         if (path.charAt(0) != '/') return "/" + path;
         return path;
     }
