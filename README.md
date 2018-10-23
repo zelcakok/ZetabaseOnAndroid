@@ -28,7 +28,7 @@ getData | null | Return the data of the data node.
 getChildrenPath | null | Return a path iterator for all the children data node.
 getChild | path:String | Return the child data node.
 
-#### Example
+### Example
 
 ##### Initialize Zetabase
 ```JAVA
