@@ -2,6 +2,7 @@ package com.zktechproductionhk.zetabaseonandroid;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
@@ -27,64 +28,106 @@ public class Zetabase {
         return instnace;
     }
 
-    public void containsKey(String path) {
-        path = preparePath(path);
-        ram.read(path);
+    public boolean containsKey(String path) {
+        try {
+            path = preparePath(path);
+            return ram.read(path) != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void write(String path, Object data, Storage.OnChangeListner listner) {
-        path = preparePath(path);
-        String json = JsonWriter.objectToJson(data);
-        this.ram.write(path, json, listner);
+        try {
+            path = preparePath(path);
+            String json = JsonWriter.objectToJson(data);
+            this.ram.write(path, json, listner);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public void write(String path, Object data) {
-        path = preparePath(path);
-        String json;
-        if (!data.getClass().getSimpleName().equals("String"))
-            json = JsonWriter.objectToJson(data);
-        else json = data.toString();
-        this.ram.write(path, json);
+        try {
+            path = preparePath(path);
+            String json;
+            if (!data.getClass().getSimpleName().equals("String"))
+                json = JsonWriter.objectToJson(data);
+            else json = data.toString();
+            this.ram.write(path, json);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public void append(String path, Object data, Storage.OnChangeListner listner) {
-        path = preparePath(path);
-        String json = JsonWriter.objectToJson(data);
-        this.ram.append(path, json, listner);
+        try {
+            path = preparePath(path);
+            String json = JsonWriter.objectToJson(data);
+            this.ram.append(path, json, listner);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public void append(String path, Object data) {
-        path = preparePath(path);
-        String json = JsonWriter.objectToJson(data);
-        this.ram.append(path, json);
+        try {
+            path = preparePath(path);
+            String json = JsonWriter.objectToJson(data);
+            this.ram.append(path, json);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public Object read(String path) {
-        path = preparePath(path);
-        String json = this.ram.read(path).getData();
-        return JsonReader.jsonToJava(json);
+        try {
+            path = preparePath(path);
+            String json = this.ram.read(path).getData();
+            return JsonReader.jsonToJava(json);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+            return null;
+        }
     }
 
     public void wipe(String path, Storage.OnChangeListner listner) {
-        path = preparePath(path);
-        if (path.equals("/")) this.ram.purge(listner);
-        this.ram.wipe(path, listner);
+        try {
+            path = preparePath(path);
+            if (path.equals("/")) this.ram.purge(listner);
+            this.ram.wipe(path, listner);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public void wipe(String path) {
-        path = preparePath(path);
-        if (path.equals("/")) this.ram.purge();
-        else this.ram.wipe(path);
+        try {
+            path = preparePath(path);
+            if (path.equals("/")) this.ram.purge();
+            else this.ram.wipe(path);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public void monitor(String path, Storage.Monitor monitor) {
-        path = preparePath(path);
-        this.ram.monitor(path, monitor);
+        try {
+            path = preparePath(path);
+            this.ram.monitor(path, monitor);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     public DataNode getDataNode(String path) {
-        path = preparePath(path);
-        return this.ram.read(path);
+        try {
+            path = preparePath(path);
+            return this.ram.read(path);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+            return null;
+        }
     }
 
     private String preparePath(String path) {
@@ -105,5 +148,9 @@ public class Zetabase {
         DataNode root = getDataNode("/");
         String rootJson = JsonWriter.objectToJson(root);
         this.database.write(rootJson.getBytes(), listener);
+    }
+
+    public String debug() {
+        return ram.toString();
     }
 }
