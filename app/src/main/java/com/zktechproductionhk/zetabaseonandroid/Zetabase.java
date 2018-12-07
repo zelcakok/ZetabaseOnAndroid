@@ -27,6 +27,11 @@ public class Zetabase {
         return instnace;
     }
 
+    public void containsKey(String path) {
+        path = preparePath(path);
+        ram.read(path);
+    }
+
     public void write(String path, Object data, Storage.OnChangeListner listner) {
         path = preparePath(path);
         String json = JsonWriter.objectToJson(data);
