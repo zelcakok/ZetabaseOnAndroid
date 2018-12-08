@@ -1,6 +1,24 @@
 # ZetabaseOnAndroid
 An NoSQL database provides a quick way to store or cache data.
 
+## How to use
+#### Add it in your root build.gradle at the end of repositories:
+``` Javascript
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+#### Add the dependency
+``` Javascript
+dependencies {
+    implementation 'com.github.User:Repo:Tag'
+}
+```
+
 ## DEMO
 ``` Java
 package com.zktechproductionhk.zetabase;
