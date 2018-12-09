@@ -29,6 +29,10 @@ public class DataNode implements Serializable {
         this.data = data;
     }
 
+    public void replaceDataNode(String key, DataNode dataNode) {
+        this.nodes.put(key, dataNode);
+    }
+
     public QueryPath traverse(String path, boolean createMissing) {
         DataNode ptr = this, parent = null;
         String[] tokens = tokenize(path);
