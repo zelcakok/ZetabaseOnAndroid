@@ -1,6 +1,12 @@
 package com.zktechproductionhk.zetabaseonandroid.Memory;
 
+import android.support.annotation.Nullable;
+import android.util.Log;
+
 import com.cedarsoftware.util.io.JsonWriter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -20,11 +26,25 @@ public class DataNode implements Serializable {
         this.nodes = new HashMap<>();
     }
 
-    public String toJSON() {
-        Map args = new HashMap<String, Boolean>() {{
-            put(JsonWriter.TYPE, false);
-        }};
-        return JsonWriter.objectToJson(this, args);
+    public JSONObject toJSON(@Nullable String parent, @Nullable JSONObject jsonObject) {
+        try {
+            String parentPath = (parent != null ? parent : "");
+            jsonObject = jsonObject == null ? new JSONObject() : jsonObject;
+//            Log.d(TAG, "CUR: " + parentPath + this.path + " => " + this.data);
+//            Log.d(TAG, "[PARENT]: " + parent);
+//            Log.d(TAG, "[WRITE]: " + this.path + " => " + this.data);
+            jsonObject.put(parent == null ? this.path : parent, this.data);
+            for (String child : nodes.keySet()) {
+                JSONObject subJson = nodes.get(child).toJSON(parentPath + this.path + (parent != null ? "/" : ""), null);
+//                Log.d(TAG, "SUB: " + subJson);
+                jsonObject.put(child, subJson);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+//            Log.d(TAG, "[RETURN]: " + jsonObject);
+            return jsonObject;
+        }
     }
 
     public String getPath() {
