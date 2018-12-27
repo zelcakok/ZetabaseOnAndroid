@@ -35,14 +35,6 @@ public class Zetabase {
         return instnace;
     }
 
-    public String toJSON() {
-        Map args = new HashMap<String, Boolean>() {{
-            put(JsonWriter.TYPE, false);
-        }};
-        DataNode node = this.ram.read("/");
-        return JsonWriter.objectToJson(node, args);
-    }
-
     public boolean containsKey(String path) {
         try {
             path = preparePath(path);
