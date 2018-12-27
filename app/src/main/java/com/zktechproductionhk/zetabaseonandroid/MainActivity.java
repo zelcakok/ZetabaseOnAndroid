@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static String TAG = "[MAIN]";
     private Zetabase zetabase;
 
     @Override
@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        zetabase = Zetabase.getInstnace(this);
-        Log.d("[MAIN]", "OBJ: " + zetabase.debug());
     }
 
 }

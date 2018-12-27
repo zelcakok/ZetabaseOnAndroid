@@ -10,6 +10,13 @@ import com.zktechproductionhk.zetabaseonandroid.InternalStorage.IO;
 import com.zktechproductionhk.zetabaseonandroid.Memory.DataNode;
 import com.zktechproductionhk.zetabaseonandroid.Memory.Storage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class Zetabase {
 
     public static Zetabase instnace = null;
@@ -26,6 +33,14 @@ public class Zetabase {
     public static Zetabase getInstnace(Context context) {
         if (instnace == null) instnace = new Zetabase(context);
         return instnace;
+    }
+
+    public String toJSON() {
+        Map args = new HashMap<String, Boolean>() {{
+            put(JsonWriter.TYPE, false);
+        }};
+        DataNode node = this.ram.read("/");
+        return JsonWriter.objectToJson(node, args);
     }
 
     public boolean containsKey(String path) {
